@@ -1,4 +1,4 @@
-import { AlizarinModel, client, graphManager, staticStore, RDM } from '../package/dist/alizarin.js';
+import { client, graphManager, staticStore, RDM } from '../package/dist/alizarin.js';
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH;
 
@@ -20,17 +20,13 @@ export function testAlizarin() {
 
   console.log('Initializing Alizarin');
   graphManager.initialize().then(async () => {
-    class Talk extends AlizarinModel<Talk> {};
-    const Talks = await graphManager.get(Talk);
+    const Talks = await graphManager.get("Talk");
 
-    class Institution extends AlizarinModel<Institution> {};
-    const Institutions = await graphManager.get(Institution);
+    const Institutions = await graphManager.get("Institution");
 
-    class Session extends AlizarinModel<Session> {};
-    const Sessions = await graphManager.get(Session);
+    const Sessions = await graphManager.get("Session");
 
-    class Person extends AlizarinModel<Person> {};
-    const Persons = await graphManager.get(Person);
+    const Persons = await graphManager.get("Person");
 
     const scratchspace = document.getElementById('alizarin-scratchspace');
     if (scratchspace) {
