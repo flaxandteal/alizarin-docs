@@ -7,6 +7,7 @@ const config = {
   output: 'export',
   basePath: '/alizarin-docs',
   reactStrictMode: true,
+  images: { unoptimized: true }
 };
 
 export default withMDX(config);
