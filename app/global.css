@@ -1,3 +1,13 @@
 @import 'tailwindcss';
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
+
+.alizarin-code {
+  display: inline-block;
+  width: 90%;
+}
+
+.alizarin-run-box {
+  display: inline-block;
+  vertical-align: top;
+}
