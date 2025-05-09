@@ -1,4 +1,4 @@
-import { client, graphManager, staticStore, RDM } from '../package/dist/alizarin.js';
+import { client, graphManager, staticStore, RDM } from 'alizarin';
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import remarkStringify from 'remark-stringify'
