@@ -8,9 +8,6 @@ const config = {
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
   reactStrictMode: true,
   images: { unoptimized: true },
-  optimization: {
-    minimize: false
-  },
   webpack(config) {
     config.resolve.fallback = {
 
@@ -20,6 +17,7 @@ const config = {
 
       fs: false, // the solution
     };
+    config.optimization.minimize = false;
     return config;
   }
 };
