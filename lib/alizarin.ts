@@ -18,11 +18,11 @@ export function testAlizarin(module: string) {
     console.log(module, fetch(module));
     initialized = true;
     const archesClient = new client.ArchesClientRemoteStatic(BASE_PATH || "", {
-      allGraphFile: (() => 'example/resource_models/_all.json'),
-      graphIdToGraphFile: ((graphId: string) => `example/resource_models/${graphId}.json`),
-      graphIdToResourcesFiles: ((graphId: string) => [`example/business_data/_${graphId}.json`]),
-      resourceIdToFile: ((resourceId: string) => `example/business_data/${resourceId}.json`),
-      collectionIdToFile: ((collectionId: string) => `example/collections/${collectionId}.json`)
+      allGraphFile: (() => 'package/docs/example/resource_models/_all.json'),
+      graphIdToGraphFile: ((graphId: string) => `package/docs/example/resource_models/${graphId}.json`),
+      graphIdToResourcesFiles: ((graphId: string) => [`package/docs/example/business_data/_${graphId}.json`]),
+      resourceIdToFile: ((resourceId: string) => `package/docs/example/business_data/${resourceId}.json`),
+      collectionIdToFile: ((collectionId: string) => `package/docs/example/collections/${collectionId}.json`)
     });
     graphManager.archesClient = archesClient;
     staticStore.archesClient = archesClient;
