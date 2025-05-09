@@ -17,6 +17,7 @@ const config = {
 
       fs: false, // the solution
     };
+    config.optimization.minimize = false;
     return config;
   }
 };
