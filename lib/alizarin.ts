@@ -29,6 +29,7 @@ export function testAlizarin(module: string) {
     const scratchspace = document.getElementById('alizarin-scratchspace');
     import(`../content/docs/example/example-1.ts`).then((result) => {
       let buffer = '';
+      // eslint-disable-next-line
       function print(...inp: any[]): void {
         const line = [];
         for (const cmpt of inp) {

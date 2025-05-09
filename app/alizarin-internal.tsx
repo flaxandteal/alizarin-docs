@@ -1,14 +1,9 @@
 "use client";
 
 import { testAlizarin } from '@/lib/alizarin';
-import Children from 'react-children-utilities';
 import * as React from 'react';
-import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock';
-
-const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH;
 
 export default function AlizarinInternal({module}: {module: string}) {
-  console.log("MOD", module);
   return (
       <div className='alizarin-run-box'>
         <button type='button'

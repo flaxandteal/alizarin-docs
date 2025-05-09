@@ -23,7 +23,7 @@ export default async function Alizarin({module}: {module: string}) {
     <div id='alizarin-testbed'>
       <AlizarinInternal module={module}/>
       <div className='alizarin-code'>
-        <DynamicCodeBlock id='alizarin-definition' code={block} lang='ts' />
+        <DynamicCodeBlock code={block} lang='ts' />
       </div>
       <div id='alizarin-scratchspace'></div>
     </div>
