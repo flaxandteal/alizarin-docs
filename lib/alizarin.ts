@@ -1,22 +1,22 @@
+import * as React from 'react';
 import { type GraphManager } from 'alizarin';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import remarkStringify from 'remark-stringify';
 import {unified} from 'unified';
+import example1 from '../content/docs/example/example-1';
 
 type AlizarinModule = typeof import('alizarin');
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH;
 
-let initialized = false;
-export function testAlizarin(module: string) {
+let initialized: Promise<React.ReactNode> | null = null;
+export function testAlizarin(module: string): Promise<React.ReactNode> | null {
   if (initialized) {
-    return;
+    return initialized;
   }
-  import('alizarin').then(async (alizarin: AlizarinModule) => {
+  initialized = import('alizarin').then(async (alizarin: AlizarinModule) => {
     const { client, graphManager, staticStore, RDM } = await alizarin;
-    console.log(module, fetch(module));
-    initialized = true;
     const archesClient = new client.ArchesClientRemoteStatic(BASE_PATH || "", {
       allGraphFile: (() => 'package/docs/example/resource_models/_all.json'),
       graphIdToGraphFile: ((graphId: string) => `package/docs/example/resource_models/${graphId}.json`),
@@ -31,26 +31,9 @@ export function testAlizarin(module: string) {
     console.log('Initializing Alizarin');
     return graphManager;
   }).then((graphManager: GraphManager) => {
-    graphManager.initialize().then(async () => {
-      const scratchspace = document.getElementById('alizarin-scratchspace');
-      import(`../content/docs/example/example-1.ts`).then((result) => {
-        let buffer = '';
-        // eslint-disable-next-line
-        function print(...inp: any[]): void {
-          const line = [];
-          for (const cmpt of inp) {
-            line.push(`${cmpt}`);
-          }
-          buffer += line.join(' ') + '\n';
-        }
-        result.default.run({print}).then(async () => {
-          if (scratchspace) {
-            const file = await unified().use(remarkParse).use(remarkRehype).use(remarkStringify).parse(buffer);
-            console.log(file);
-            scratchspace.innerHTML = String("<pre>" + buffer + "</pre>");
-          }
-        });
-      });
+    return graphManager.initialize()
+  }).then(() => {
+      return example1.run();
       // if (scratchspace) {
       //   let html = '';
       //   for (const graph of [Talks, Institutions, Sessions, Persons]) {
@@ -63,6 +46,6 @@ export function testAlizarin(module: string) {
       //   }
       //   scratchspace.innerHTML = html;
       // }
-    });
   });
+  return initialized;
 }

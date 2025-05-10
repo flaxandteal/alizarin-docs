@@ -11,3 +11,8 @@
   display: inline-block;
   vertical-align: top;
 }
+
+.alizarin-scratchspace {
+  font-family: monospace;
+  padding: 3rem;
+}
