@@ -2,6 +2,7 @@ import { testAlizarin } from '@/lib/alizarin';
 import * as React from 'react';
 
 export default function AlizarinInternal({module, setRun}: {module: string, setRun: React.Dispatch<React.SetStateAction<React.ReactNode>>}): React.ReactNode {
+  console.log('TODO', module);
   return (
       <div className='alizarin-run-box'>
         <button type='button'
