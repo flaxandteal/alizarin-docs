@@ -1,9 +1,5 @@
 import * as React from 'react';
 import { type GraphManager } from 'alizarin';
-import remarkParse from 'remark-parse';
-import remarkRehype from 'remark-rehype';
-import remarkStringify from 'remark-stringify';
-import {unified} from 'unified';
 import example1 from '../content/docs/example/example-1';
 
 type AlizarinModule = typeof import('alizarin');
@@ -11,7 +7,7 @@ type AlizarinModule = typeof import('alizarin');
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH;
 
 let initialized: Promise<React.ReactNode> | null = null;
-export function testAlizarin(module: string): Promise<React.ReactNode> | null {
+export function testAlizarin(): Promise<React.ReactNode> | null {
   if (initialized) {
     return initialized;
   }
