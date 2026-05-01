@@ -14,11 +14,11 @@ export function testAlizarin(): Promise<React.ReactNode> | null {
   initialized = import('alizarin').then(async (alizarin: AlizarinModule) => {
     const { client, graphManager, staticStore, RDM } = await alizarin;
     const archesClient = new client.ArchesClientRemoteStatic(BASE_PATH || "", {
-      allGraphFile: (() => 'package/docs/example/resource_models/_all.json'),
-      graphIdToGraphFile: ((graphId: string) => `package/docs/example/resource_models/${graphId}.json`),
-      graphIdToResourcesFiles: ((graphId: string) => [`package/docs/example/business_data/_${graphId}.json`]),
-      resourceIdToFile: ((resourceId: string) => `package/docs/example/business_data/${resourceId}.json`),
-      collectionIdToFile: ((collectionId: string) => `package/docs/example/collections/${collectionId}.json`)
+      allGraphFile: (() => 'docs/example/resource_models/_all.json'),
+      graphIdToGraphFile: ((graphId: string) => `docs/example/resource_models/${graphId}.json`),
+      graphIdToResourcesFiles: ((graphId: string) => [`docs/example/business_data/_${graphId}.json`]),
+      resourceIdToFile: ((resourceId: string) => `docs/example/business_data/${resourceId}.json`),
+      collectionIdToFile: ((collectionId: string) => `docs/example/collections/${collectionId}.json`)
     });
     graphManager.archesClient = archesClient;
     staticStore.archesClient = archesClient;

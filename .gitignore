@@ -6,6 +6,10 @@
 .content-collections
 .source
 
+# docs content (populated from alizarin repo at build time or via npm run sync-docs)
+/content/docs/*
+!/content/docs/.gitkeep
+
 # test & build
 /coverage
 /.next/

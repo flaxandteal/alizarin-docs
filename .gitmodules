@@ -1,3 +1,0 @@
-[submodule "package"]
-	path = public/package
-	url = https://github.com/flaxandteal/alizarin
