@@ -45,7 +45,7 @@ function generateForVersion(version, ref) {
   run(`git clone --depth 1 --branch ${ref} ${REPO} ${tmpDir}`);
 
   // Install dependencies (needed for TS type resolution)
-  run('npm ci', { cwd: tmpDir });
+  run('npm install --ignore-scripts', { cwd: tmpDir });
 
   // Create pkg/ type stubs if not present (avoids needing full WASM build)
   const pkgDir = join(tmpDir, 'pkg');
