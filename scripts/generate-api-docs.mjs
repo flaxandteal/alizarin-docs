@@ -99,7 +99,6 @@ function generateForVersion(version, ref) {
     'npx typedoc',
     hasConfig ? `--options ${typedocConfig}` : '',
     `--plugin typedoc-plugin-markdown`,
-    `--plugin typedoc-plugin-frontmatter`,
     `--entryPoints ${join(tmpDir, 'js')}`,
     `--tsconfig ${typedocTsconfig}`,
     `--out ${outDir}`,
