@@ -75,6 +75,31 @@ function generateForVersion(version, ref) {
     console.log('Created pkg/alizarin.d.ts stub for TypeDoc');
   }
 
+  // Check that the js/ source directory exists (older tags may have different structure)
+  // DEPRECATED
+  const jsDir = join(tmpDir, 'js');
+  if (!existsSync(jsDir)) {
+    console.warn(`Warning: js/ directory not found in ${ref}, skipping API generation for ${version}`);
+    rmSync(tmpDir, { recursive: true });
+    writeFileSync(
+      join(outDir, 'index.mdx'),
+      [
+        '---',
+        `title: API Reference (${version === 'stable' ? 'Stable' : 'Alpha'})`,
+        `description: API docs not available for this version`,
+        '---',
+        '',
+        `API documentation is not available for this version (\`${ref}\`). The TypeScript source structure differs from current.`,
+        '',
+      ].join('\n')
+    );
+    writeFileSync(
+      join(outDir, 'meta.json'),
+      JSON.stringify({ title: version === 'stable' ? 'Stable' : 'Alpha' }, null, 2) + '\n'
+    );
+    return;
+  }
+
   // Ensure a TypeDoc-compatible tsconfig exists (older refs may not have one)
   const typedocTsconfig = join(tmpDir, 'tsconfig.typedoc.json');
   if (!existsSync(typedocTsconfig)) {
