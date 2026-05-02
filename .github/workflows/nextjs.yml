@@ -37,6 +37,15 @@ jobs:
           mkdir -p ${{ github.workspace }}/content/docs
           cp -r docs/* ${{ github.workspace }}/content/docs/
 
+      - name: Determine latest stable tag
+        id: stable_tag
+        run: |
+          cd /tmp/alizarin
+          git fetch --tags
+          TAG=$(git tag -l 'v*' --sort=-v:refname | grep -v -E '(alpha|beta|rc)' | head -1)
+          echo "tag=${TAG:-}" >> $GITHUB_OUTPUT
+          echo "Latest stable tag: ${TAG:-none}"
+
       - name: Copy example data to public
         run: |
           mkdir -p public/docs/example
@@ -65,6 +74,11 @@ jobs:
 
       - name: Generate llms.txt
         run: node scripts/generate-llms-txt.mjs
+
+      - name: Generate API reference docs
+        run: node scripts/generate-api-docs.mjs
+        env:
+          STABLE_TAG: ${{ steps.stable_tag.outputs.tag }}
 
       - name: Build with Next.js
         run: npx --no-install next build
