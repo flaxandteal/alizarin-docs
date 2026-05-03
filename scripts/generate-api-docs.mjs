@@ -142,7 +142,16 @@ function generateForVersion(version, ref) {
 
   run(typedocCmd, { cwd: root });
 
-  // Post-process: add frontmatter and clean up paths
+  // Post-process: clean up generated files for MDX compatibility
+  // Remove README.mdx and _media/ (project README, not API docs)
+  const readmePath = join(outDir, 'README.mdx');
+  if (existsSync(readmePath)) rmSync(readmePath);
+  const mediaDir = join(outDir, '_media');
+  if (existsSync(mediaDir)) rmSync(mediaDir, { recursive: true });
+  // Also remove modules.mdx (just a list of links to other files)
+  const modulesPath = join(outDir, 'modules.mdx');
+  if (existsSync(modulesPath)) rmSync(modulesPath);
+
   const mdxFiles = readdirSync(outDir, { recursive: true })
     .filter(f => f.endsWith('.mdx') && f !== 'index.mdx');
   for (const file of mdxFiles) {
@@ -160,6 +169,36 @@ function generateForVersion(version, ref) {
 
     // Clean up "Defined in" paths (remove /tmp/alizarin-xxx/ prefix)
     content = content.replace(/Defined in: [^\n]*?\/js\//g, 'Defined in: js/');
+
+    // Escape angle brackets in TypeScript generics outside of code blocks/backticks.
+    // MDX treats <Foo> as JSX. We need to escape them.
+    // Strategy: process line by line, skip lines inside fenced code blocks,
+    // and escape < > that appear outside of backtick spans.
+    const lines = content.split('\n');
+    let inCodeBlock = false;
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].startsWith('```')) {
+        inCodeBlock = !inCodeBlock;
+        continue;
+      }
+      if (inCodeBlock) continue;
+
+      // Skip frontmatter
+      if (i === 0 && lines[i] === '---') continue;
+
+      // Replace angle brackets outside of backtick spans
+      // Split by backtick segments, only escape in non-code segments
+      const parts = lines[i].split('`');
+      for (let j = 0; j < parts.length; j += 2) {
+        // Even indices are outside backticks
+        // Escape < and > that look like generic type params (not markdown links/HTML)
+        // Match patterns like: Type<Foo>, Promise<void>, Map<string, number>
+        parts[j] = parts[j].replace(/(<)([A-Za-z])/g, '\\<$2');
+        parts[j] = parts[j].replace(/([A-Za-z\]\)])>/g, '$1\\>');
+      }
+      lines[i] = parts.join('`');
+    }
+    content = lines.join('\n');
 
     writeFileSync(filePath, content);
   }
