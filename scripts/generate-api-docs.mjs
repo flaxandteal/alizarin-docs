@@ -192,9 +192,12 @@ function generateForVersion(version, ref) {
       for (let j = 0; j < parts.length; j += 2) {
         // Even indices are outside backticks
         // Escape < and > that look like generic type params (not markdown links/HTML)
-        // Match patterns like: Type<Foo>, Promise<void>, Map<string, number>
-        parts[j] = parts[j].replace(/(<)([A-Za-z])/g, '\\<$2');
-        parts[j] = parts[j].replace(/([A-Za-z\]\)])>/g, '$1\\>');
+        // Only escape if not already escaped (no preceding backslash)
+        parts[j] = parts[j].replace(/(?<!\\)(<)([A-Za-z])/g, '\\<$2');
+        parts[j] = parts[j].replace(/([A-Za-z\]\)])(?<!\\)>/g, '$1\\>');
+        // Escape curly braces (MDX interprets them as JS expressions)
+        parts[j] = parts[j].replace(/(?<!\\)\{/g, '\\{');
+        parts[j] = parts[j].replace(/(?<!\\)\}/g, '\\}');
       }
       lines[i] = parts.join('`');
     }
