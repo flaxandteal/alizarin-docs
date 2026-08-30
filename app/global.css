@@ -255,6 +255,22 @@ body {
   min-height: 150px;
 }
 
+.alizarin-scratchspace table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.alizarin-scratchspace th,
+.alizarin-scratchspace td {
+  text-align: left;
+  padding: 3px 16px 3px 0;
+  border-bottom: 1px solid var(--az-line);
+  vertical-align: top;
+}
+.alizarin-scratchspace th {
+  color: var(--az-muted);
+  font-weight: 600;
+}
+
 /* ================================================================== *
  * Landing page (app/(home)/page.tsx)
  * Responsive behaviour is driven by custom properties swapped at three
