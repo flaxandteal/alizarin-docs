@@ -12,7 +12,11 @@ function ensureSetup(): Promise<void> {
     return setup;
   }
   setup = import('alizarin').then(async (alizarin: AlizarinModule) => {
-    const { client, graphManager, staticStore, RDM } = alizarin;
+    const { client, graphManager, staticStore, RDM, initWasm } = alizarin;
+    // The WASM core must be loaded before anything touches the resource registry
+    // (setting archesClient builds it). The package auto-inits on a microtask, but
+    // we await explicitly so setup never races ahead of a ready WASM module.
+    await initWasm();
     const archesClient = new client.ArchesClientRemoteStatic(BASE_PATH || "", {
       allGraphFile: (() => 'docs/example/resource_models/_all.json'),
       graphIdToGraphFile: ((graphId: string) => `docs/example/resource_models/${graphId}.json`),
