@@ -204,11 +204,11 @@ body {
   background: var(--az-link);
 }
 
-/* Two-column split → single column at ≤1280px so API names never
-   truncate. */
+/* Stacked: code on top, run/output below — full width so API names
+   and console output never get squeezed into a narrow column. */
 .alizarin-example-body {
   display: grid;
-  grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .alizarin-code {
@@ -226,7 +226,7 @@ body {
   flex-direction: column;
   gap: 12px;
   padding: 16px;
-  border-left: 1px solid var(--az-line);
+  border-top: 1px solid var(--az-line);
 }
 
 .alizarin-run-box button {
@@ -253,16 +253,6 @@ body {
   background: var(--az-chip);
   padding: 12px;
   min-height: 150px;
-}
-
-@media (max-width: 1280px) {
-  .alizarin-example-body {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .alizarin-run-box {
-    border-left: 0;
-    border-top: 1px solid var(--az-line);
-  }
 }
 
 /* ================================================================== *

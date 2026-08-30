@@ -1,5 +1,6 @@
 import './global.css';
 import { RootProvider } from 'fumadocs-ui/provider';
+import ChunkReload from './chunk-reload.tsx';
 import { League_Spartan, Caveat } from 'next/font/google';
 import localFont from 'next/font/local';
 import type { CSSProperties, ReactNode } from 'react';
@@ -50,6 +51,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       suppressHydrationWarning
     >
       <body className="flex flex-col min-h-screen">
+        <ChunkReload />
         <RootProvider
           search={{
             options: {
