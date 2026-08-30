@@ -5,6 +5,8 @@
 .contentlayer
 .content-collections
 .source
+# generated at build time by scripts/generate-llms-txt.mjs (from synced docs)
+/public/llms.txt
 
 # docs content (populated from alizarin repo at build time or via npm run sync-docs)
 /content/docs/*

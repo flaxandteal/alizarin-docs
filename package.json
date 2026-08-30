@@ -12,7 +12,7 @@
     "sync-docs": "rm -rf /tmp/alizarin-docs-sync && git clone --depth 1 --sparse https://github.com/flaxandteal/alizarin.git /tmp/alizarin-docs-sync && cd /tmp/alizarin-docs-sync && git sparse-checkout set docs/ && cp -r docs/* $INIT_CWD/content/docs/ && rm -rf /tmp/alizarin-docs-sync"
   },
   "dependencies": {
-    "alizarin": "https://github.com/flaxandteal/alizarin/releases/download/v0.2.1-alpha.81/alizarin-0.2.1-alpha.81.tgz",
+    "alizarin": "https://github.com/flaxandteal/alizarin/releases/download/v2.0.0-beta.1/alizarin-2.0.0-beta.1.tgz",
     "fumadocs-core": "15.2.13",
     "fumadocs-mdx": "11.6.2",
     "fumadocs-ui": "15.2.13",
