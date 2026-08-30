@@ -20,7 +20,8 @@ export default async function Page(props: {
 
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
-      <DocsTitle>{page.data.title}</DocsTitle>
+      <DocsTitle className="az-doc-title">{page.data.title}</DocsTitle>
+      <div className="az-title-bar" aria-hidden />
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
         <MDXContent

@@ -35,6 +35,8 @@ function ensureSetup(): Promise<void> {
 type RunnableExample = { default: { run: () => Promise<React.ReactNode> } };
 const EXAMPLES: Record<string, () => Promise<RunnableExample>> = {
   'example-1': () => import('../content/docs/example/example-1'),
+  'example-2': () => import('../content/docs/example/example-2'),
+  'example-3': () => import('../content/docs/example/example-3'),
 };
 
 // "/example/example-1.tsx" -> "example-1"

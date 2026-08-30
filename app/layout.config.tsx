@@ -17,12 +17,13 @@ export const baseOptions: BaseLayoutProps = {
           xmlns="http://www.w3.org/2000/svg"
           aria-label="Logo"
         >
-          <circle cx={12} cy={12} r={12} fill="#e32636" />
+          <circle cx={12} cy={12} r={12} fill="#992824" />
         </svg>
         Alizarin
       </>
     ),
   },
+  githubUrl: 'https://github.com/flaxandteal/alizarin',
   links: [
     {
       text: 'Documentation',
