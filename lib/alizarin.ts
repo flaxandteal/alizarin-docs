@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { type GraphManager } from 'alizarin';
-import example1 from '../content/docs/example/example-1';
 
 type AlizarinModule = typeof import('alizarin');
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH;
 
-let initialized: Promise<React.ReactNode> | null = null;
-export function testAlizarin(): Promise<React.ReactNode> | null {
-  if (initialized) {
-    return initialized;
+// Configure the shared alizarin singletons against the docs' static example
+// data. Done once and reused across every snippet run.
+let setup: Promise<void> | null = null;
+function ensureSetup(): Promise<void> {
+  if (setup) {
+    return setup;
   }
-  initialized = import('alizarin').then(async (alizarin: AlizarinModule) => {
-    const { client, graphManager, staticStore, RDM } = await alizarin;
+  setup = import('alizarin').then(async (alizarin: AlizarinModule) => {
+    const { client, graphManager, staticStore, RDM } = alizarin;
     const archesClient = new client.ArchesClientRemoteStatic(BASE_PATH || "", {
       allGraphFile: (() => 'docs/example/resource_models/_all.json'),
       graphIdToGraphFile: ((graphId: string) => `docs/example/resource_models/${graphId}.json`),
@@ -23,25 +23,40 @@ export function testAlizarin(): Promise<React.ReactNode> | null {
     graphManager.archesClient = archesClient;
     staticStore.archesClient = archesClient;
     RDM.archesClient = archesClient;
-
-    console.log('Initializing Alizarin');
-    return graphManager;
-  }).then((graphManager: GraphManager) => {
-    return graphManager.initialize()
-  }).then(() => {
-      return example1.run();
-      // if (scratchspace) {
-      //   let html = '';
-      //   for (const graph of [Talks, Institutions, Sessions, Persons]) {
-      //     html += `
-      //     <pre>
-      // Talks:
-      // - ${[...graph.getNodeObjectsByAlias().entries().filter(([k]) => k).map(([k, v]) => `${k}: ${v.datatype}`)].join('\n  - ')}
-      //     </pre>
-      //     `;
-      //   }
-      //   scratchspace.innerHTML = html;
-      // }
+    await graphManager.initialize();
   });
-  return initialized;
+  return setup;
+}
+
+// Registry of runnable examples. Each module under content/docs/example/ exports
+// a default `{ run }` whose body is the code block shown on the page. Add an
+// entry here when adding a new runnable snippet — the key must match the
+// `<AlizarinComponent module='/example/<key>.tsx'>` embedded on the page.
+type RunnableExample = { default: { run: () => Promise<React.ReactNode> } };
+const EXAMPLES: Record<string, () => Promise<RunnableExample>> = {
+  'example-1': () => import('../content/docs/example/example-1'),
+};
+
+// "/example/example-1.tsx" -> "example-1"
+function exampleName(module: string): string {
+  return module.replace(/^\/example\//, '').replace(/\.tsx?$/, '');
+}
+
+// Run the snippet for a given docs `module` and return its rendered result.
+// Setup is cached; each click re-runs the snippet itself.
+export function testAlizarin(module: string = '/example/example-1.tsx'): Promise<React.ReactNode> {
+  const name = exampleName(module);
+  const load = EXAMPLES[name];
+  if (!load) {
+    return Promise.resolve(
+      React.createElement(
+        'div',
+        { className: 'alizarin-error' },
+        `No runnable example registered for "${name}" — add it to EXAMPLES in lib/alizarin.ts.`
+      )
+    );
+  }
+  return ensureSetup()
+    .then(load)
+    .then((mod) => mod.default.run());
 }
