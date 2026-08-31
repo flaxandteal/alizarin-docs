@@ -13,6 +13,8 @@
 !/content/docs/.gitkeep
 # derived: static-served copy of the example data (regenerated from content/docs/example)
 /public/docs/example
+# derived: maplibre worker copied from node_modules (npm run copy-map-worker)
+/public/maplibre
 
 # test & build
 /coverage

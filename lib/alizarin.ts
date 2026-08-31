@@ -32,6 +32,25 @@ function ensureSetup(): Promise<void> {
   return setup;
 }
 
+// Load every Site's boundary as one GeoJSON FeatureCollection, each feature
+// tagged with its site name — drives the live map on the Geospatial page.
+export async function loadSiteBoundaries(): Promise<{ type: 'FeatureCollection'; features: unknown[] }> {
+  await ensureSetup();
+  const { graphManager } = await import('alizarin');
+  const Sites = await graphManager.get('Site');
+  const sites = await Sites.all();
+  const features: unknown[] = [];
+  for (const site of sites) {
+    const s = site as unknown as { boundary: Promise<{ features?: { properties?: Record<string, unknown> }[] }>; name: Promise<unknown> };
+    const boundary = await s.boundary;
+    const name = String(await s.name);
+    for (const f of boundary?.features ?? []) {
+      features.push({ ...f, properties: { ...(f.properties ?? {}), name } });
+    }
+  }
+  return { type: 'FeatureCollection', features };
+}
+
 // Registry of runnable examples. Each module under content/docs/example/ exports
 // a default `{ run }` whose body is the code block shown on the page. Add an
 // entry here when adding a new runnable snippet — the key must match the
@@ -48,6 +67,7 @@ const EXAMPLES: Record<string, () => Promise<RunnableExample>> = {
   'example-8': () => import('../content/docs/example/example-8'),
   'example-9': () => import('../content/docs/example/example-9'),
   'example-10': () => import('../content/docs/example/example-10'),
+  'example-11': () => import('../content/docs/example/example-11'),
 };
 
 // "/example/example-1.tsx" -> "example-1"
