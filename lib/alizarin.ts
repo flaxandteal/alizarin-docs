@@ -75,6 +75,9 @@ const EXAMPLES: Record<string, () => Promise<RunnableExample>> = {
   'example-12': () => import('../content/docs/example/example-12'),
   'example-13': () => import('../content/docs/example/example-13'),
   'example-14': () => import('../content/docs/example/example-14'),
+  'example-15': () => import('../content/docs/example/example-15'),
+  'example-16': () => import('../content/docs/example/example-16'),
+  'example-17': () => import('../content/docs/example/example-17'),
 };
 
 // "/example/example-1.tsx" -> "example-1"

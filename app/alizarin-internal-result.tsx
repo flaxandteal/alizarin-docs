@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock';
 import AlizarinInternal from './alizarin-internal.tsx';
+import AlizarinErrorBoundary from './alizarin-error-boundary.tsx';
 
 export default function AlizarinInternalResult({module, block}: {module: string, block: string}) {
   const [run, setRun] = React.useState<React.ReactNode>(null);
@@ -24,7 +25,13 @@ export default function AlizarinInternalResult({module, block}: {module: string,
         <div className='alizarin-run-box'>
           <AlizarinInternal module={module} setRun={setRun} />
           {run &&
-            <div className='alizarin-scratchspace'>{run}</div>
+            <div className='alizarin-scratchspace'>
+              <AlizarinErrorBoundary resetKey={run}>
+                <React.Suspense fallback={<span>Resolving…</span>}>
+                  {run}
+                </React.Suspense>
+              </AlizarinErrorBoundary>
+            </div>
           }
         </div>
       </div>
