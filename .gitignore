@@ -11,6 +11,8 @@
 # docs content (populated from alizarin repo at build time or via npm run sync-docs)
 /content/docs/*
 !/content/docs/.gitkeep
+# derived: static-served copy of the example data (regenerated from content/docs/example)
+/public/docs/example
 
 # test & build
 /coverage

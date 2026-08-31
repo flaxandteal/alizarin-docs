@@ -9,7 +9,7 @@
     "dev": "next dev --turbo",
     "start": "next start",
     "postinstall": "fumadocs-mdx",
-    "sync-docs": "rm -rf /tmp/alizarin-docs-sync && git clone --depth 1 --sparse https://github.com/flaxandteal/alizarin.git /tmp/alizarin-docs-sync && cd /tmp/alizarin-docs-sync && git sparse-checkout set docs/ && cp -r docs/* $INIT_CWD/content/docs/ && rm -rf /tmp/alizarin-docs-sync"
+    "sync-docs": "rm -rf /tmp/alizarin-docs-sync && git clone --depth 1 --sparse https://github.com/flaxandteal/alizarin.git /tmp/alizarin-docs-sync && cd /tmp/alizarin-docs-sync && git sparse-checkout set docs/ && cp -r docs/* $INIT_CWD/content/docs/ && mkdir -p $INIT_CWD/public/docs/example && cp -r docs/example/* $INIT_CWD/public/docs/example/ && rm -rf /tmp/alizarin-docs-sync"
   },
   "dependencies": {
     "alizarin": "https://github.com/flaxandteal/alizarin/releases/download/v2.0.0-beta.1/alizarin-2.0.0-beta.1.tgz",
