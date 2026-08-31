@@ -72,6 +72,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Copy MapLibre worker to public
+        run: npm run copy-map-worker
+
       - name: Generate llms.txt
         run: node scripts/generate-llms-txt.mjs
 

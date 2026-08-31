@@ -17,6 +17,10 @@ function ensureSetup(): Promise<void> {
     // (setting archesClient builds it). The package auto-inits on a microtask, but
     // we await explicitly so setup never races ahead of a ready WASM module.
     await initWasm();
+    // Register out-of-tree datatype handlers (they self-register on wasmReady):
+    // CLM adds `reference`, filelist adds `file-list`.
+    await import('@alizarin/clm');
+    await import('@alizarin/filelist');
     const archesClient = new client.ArchesClientRemoteStatic(BASE_PATH || "", {
       allGraphFile: (() => 'docs/example/resource_models/_all.json'),
       graphIdToGraphFile: ((graphId: string) => `docs/example/resource_models/${graphId}.json`),
@@ -69,6 +73,8 @@ const EXAMPLES: Record<string, () => Promise<RunnableExample>> = {
   'example-10': () => import('../content/docs/example/example-10'),
   'example-11': () => import('../content/docs/example/example-11'),
   'example-12': () => import('../content/docs/example/example-12'),
+  'example-13': () => import('../content/docs/example/example-13'),
+  'example-14': () => import('../content/docs/example/example-14'),
 };
 
 // "/example/example-1.tsx" -> "example-1"
