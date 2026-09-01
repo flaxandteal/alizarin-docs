@@ -55,51 +55,43 @@ export async function loadSiteBoundaries(): Promise<{ type: 'FeatureCollection';
   return { type: 'FeatureCollection', features };
 }
 
-// Registry of runnable examples. Each module under content/docs/example/ exports
-// a default `{ run }` whose body is the code block shown on the page. Add an
-// entry here when adding a new runnable snippet — the key must match the
-// `<AlizarinComponent module='/example/<key>.tsx'>` embedded on the page.
+// Runnable examples live in an `examples/` folder beside each page's .mdx
+// (content/docs/<section>/examples/<name>.tsx), each a default-exported `{ run }`
+// whose body is the code block shown on the page. They are AUTO-DISCOVERED — no
+// registry to maintain. The template-literal import below makes webpack
+// code-split every matching file into its own lazy chunk, fetched only when its
+// ▶ button is clicked (adding an example needs no edit here).
 type RunnableExample = { default: { run: () => Promise<React.ReactNode> } };
-const EXAMPLES: Record<string, () => Promise<RunnableExample>> = {
-  'example-1': () => import('../content/docs/example/example-1'),
-  'example-2': () => import('../content/docs/example/example-2'),
-  'example-3': () => import('../content/docs/example/example-3'),
-  'example-4': () => import('../content/docs/example/example-4'),
-  'example-5': () => import('../content/docs/example/example-5'),
-  'example-6': () => import('../content/docs/example/example-6'),
-  'example-7': () => import('../content/docs/example/example-7'),
-  'example-8': () => import('../content/docs/example/example-8'),
-  'example-9': () => import('../content/docs/example/example-9'),
-  'example-10': () => import('../content/docs/example/example-10'),
-  'example-11': () => import('../content/docs/example/example-11'),
-  'example-12': () => import('../content/docs/example/example-12'),
-  'example-13': () => import('../content/docs/example/example-13'),
-  'example-14': () => import('../content/docs/example/example-14'),
-  'example-15': () => import('../content/docs/example/example-15'),
-  'example-16': () => import('../content/docs/example/example-16'),
-  'example-17': () => import('../content/docs/example/example-17'),
-};
 
-// "/example/example-1.tsx" -> "example-1"
-function exampleName(module: string): string {
-  return module.replace(/^\/example\//, '').replace(/\.tsx?$/, '');
+// The `module` is the path under content/docs the page embeds, e.g.
+// "/types/examples/basic-scalars.tsx". Strip the leading slash + extension:
+// "/types/examples/basic-scalars.tsx" -> "types/examples/basic-scalars"
+function examplePath(module: string): string {
+  return module.replace(/^\//, '').replace(/\.tsx?$/, '');
 }
 
 // Run the snippet for a given docs `module` and return its rendered result.
 // Setup is cached; each click re-runs the snippet itself.
-export function testAlizarin(module: string = '/example/example-1.tsx'): Promise<React.ReactNode> {
-  const name = exampleName(module);
-  const load = EXAMPLES[name];
-  if (!load) {
+export function testAlizarin(
+  module: string = '/examples/quickstart-relationships.tsx'
+): Promise<React.ReactNode> {
+  const path = examplePath(module);
+  if (!/(^|\/)examples\/[^/]+$/.test(path)) {
     return Promise.resolve(
       React.createElement(
         'div',
         { className: 'alizarin-error' },
-        `No runnable example registered for "${name}" — add it to EXAMPLES in lib/alizarin.ts.`
+        `Not a runnable example: "${module}" (expected …/examples/<name>.tsx).`
       )
     );
   }
   return ensureSetup()
-    .then(load)
+    .then(
+      () =>
+        import(
+          /* webpackInclude: /examples\/[^/]+\.tsx$/ */
+          `../content/docs/${path}`
+        ) as Promise<RunnableExample>
+    )
     .then((mod) => mod.default.run());
 }
